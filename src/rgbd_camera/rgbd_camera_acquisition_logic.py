@@ -2,6 +2,7 @@
 import rospy
 import message_filters
 import time
+import numpy as np
 
 from sensor_msgs.msg import CameraInfo
 from sensor_msgs.msg import Image
@@ -9,10 +10,32 @@ from std_msgs.msg import Header
 from rgbd_camera.msg import RgbdImage
 
 def getROSCameraParameters(ros_topic_name):
-        #doesn't work without initNode first
+    #doesn't work without initNode first
 
-        camera_info_message = rospy.wait_for_message(ros_topic_name, CameraInfo, timeout=None)
-        return camera_info_message.K
+    camera_info_message = rospy.wait_for_message(ros_topic_name, CameraInfo, timeout=None)
+    return camera_info_message.K
+
+def get_xyz_from_rgbd(image_2d_pos, depth_image, depth_camera_matrix):
+    """
+        from a numpy array of N 2d image_positions ( in a 2 by N numpy array), a numpy depth image and the camera matrix
+        returns a numpy array of the 3d_positions N by 3
+    """
+    pos_3D = []
+    for image_pos in image_2d_pos.T:
+        #print(image_pos)
+        if image_pos[0] < depth_image.shape[1] and image_pos[1] < depth_image.shape[0] and image_pos[0] > 0 and image_pos[1] > 0:
+            z = depth_image[image_pos[1], image_pos[0]]
+            y = ( image_pos[1] * z - depth_camera_matrix[1,2] ) / depth_camera_matrix[1,1]
+            x = ( image_pos[0] * z - depth_camera_matrix[0,2] ) / depth_camera_matrix[0,0]
+        else:
+            z = 0
+            y = 0
+            x = 0
+        pos_3D.append([x, y, z])
+    
+    return np.transpose(np.asarray(pos_3D))
+
+    
 
 class RGBDCameraAcquisition:
     #Class that implements the logic for acquiring two streams sync (depth and rgb) and put it together in a single image
