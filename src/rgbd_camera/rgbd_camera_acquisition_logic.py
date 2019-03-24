@@ -49,7 +49,7 @@ class RGBDCameraAcquisition:
         
         self.rgb_image_subs = message_filters.Subscriber(rgb_image_topic, Image)
         self.depth_image_subs = message_filters.Subscriber(depth_image_topic, Image)
-        self.rgbd_sync_subs = message_filters.ApproximateTimeSynchronizer([self.rgb_image_subs, self.depth_image_subs], 1, 0.01)
+        self.rgbd_sync_subs = message_filters.ApproximateTimeSynchronizer([self.rgb_image_subs, self.depth_image_subs], 1, 0.02)
 
 
         self.rgbd_pub = rospy.Publisher('rgbd_image', RgbdImage, queue_size=1)
