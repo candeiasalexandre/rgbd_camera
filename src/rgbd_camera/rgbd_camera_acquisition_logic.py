@@ -19,15 +19,14 @@ def get_xyz_from_rgbd(image_2d_pos, depth_image, depth_camera_matrix):
     """
         from a numpy array of N 2d image_positions ( in a 2 by N numpy array), a numpy depth image and the camera matrix
         returns a numpy array of the 3d_positions N by 3
-        I think there is a bug here in the conversion to xyz
     """
     pos_3D = []
     for image_pos in image_2d_pos.T:
         #print(image_pos)
         if image_pos[0] < depth_image.shape[1] and image_pos[1] < depth_image.shape[0] and image_pos[0] > 0 and image_pos[1] > 0:
             z = depth_image[image_pos[1], image_pos[0]]
-            y = ( image_pos[1] * z - depth_camera_matrix[1,2] ) / depth_camera_matrix[1,1]
-            x = ( image_pos[0] * z - depth_camera_matrix[0,2] ) / depth_camera_matrix[0,0]
+            y = ( image_pos[1] - depth_camera_matrix[1,2] ) * (z / depth_camera_matrix[1,1])
+            x = ( image_pos[0] - depth_camera_matrix[0,2] ) * (z / depth_camera_matrix[0,0])
         else:
             z = 0
             y = 0
