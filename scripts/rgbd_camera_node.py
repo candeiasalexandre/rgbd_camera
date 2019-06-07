@@ -12,10 +12,11 @@ if __name__ == "__main__":
 
 
     #test get camera intrinsics 
-    camera_1 = RGBDCameraAcquisition(depth_camera_info_topic=argvs[1], 
-                            rgb_camera_info_topic=argvs[2],
-                            rgb_image_topic=argvs[3],
-                            depth_image_topic=argvs[4])
+    camera_1 = RGBDCameraAcquisition(rgbd_topic_name=argvs[1],
+                            depth_camera_info_topic=argvs[2], 
+                            rgb_camera_info_topic=argvs[3],
+                            rgb_image_topic=argvs[4],
+                            depth_image_topic=argvs[5])
     
     #print(test_RGBD.rgb_camera_intrinsics)
     #print(test_RGBD.depth_camera_intrinsics)

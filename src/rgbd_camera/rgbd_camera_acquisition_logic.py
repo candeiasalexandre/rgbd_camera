@@ -41,7 +41,7 @@ class RGBDCameraAcquisition:
     #Class that implements the logic for acquiring two streams sync (depth and rgb) and put it together in a single image
     #We assume that rgb and depth topic are already aligned
 
-    def __init__(self, depth_camera_info_topic, rgb_camera_info_topic, rgb_image_topic, depth_image_topic):
+    def __init__(self, rgbd_topic_name, depth_camera_info_topic, rgb_camera_info_topic, rgb_image_topic, depth_image_topic):
         #doesn't work without initNode first
 
         self.depth_camera_intrinsics = getROSCameraParameters(depth_camera_info_topic)
@@ -52,7 +52,7 @@ class RGBDCameraAcquisition:
         self.rgbd_sync_subs = message_filters.ApproximateTimeSynchronizer([self.rgb_image_subs, self.depth_image_subs], 1, 0.02)
 
 
-        self.rgbd_pub = rospy.Publisher('rgbd_image', RgbdImage, queue_size=1)
+        self.rgbd_pub = rospy.Publisher(rgbd_topic_name, RgbdImage, queue_size=1)
         
     def images_callback(self, rgb_image_msg, depth_image_msg):
         #print("RGB_header: ", rgb_image_msg.header)
