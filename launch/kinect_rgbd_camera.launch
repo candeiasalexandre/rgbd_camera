@@ -3,10 +3,10 @@
   <!-- We assume that the images (depth and rgb) are already aligned default is kinect camera topics-->
   <arg name="depth_camera_info_topic" default="/camera/depth_registered/camera_info" />
   <arg name="depth_image_topic" default="/camera/depth_registered/image_raw" />
-  <arg name="rgb_camera_info_topic" default="/camera/rgb/image_raw" />
-  <arg name="rgb_image_topic" default="/camera/rgb/camera_info" />
+  <arg name="rgb_camera_info_topic" default="/camera/rgb/camera_info" />
+  <arg name="rgb_image_topic" default="/camera/rgb/image_raw" />
 
-  <include file="$(find freenect_launch)/launch/examples/freenect-registered-xyzrgb.launch">
+  <include file="$(find freenect_launch)/launch/examples/freenect-registered-xyzrgb.launch"/>
 
   <node name="rgbd_camera" pkg="rgbd_camera" type="rgbd_camera_node.py" args="$(arg depth_camera_info_topic) $(arg rgb_camera_info_topic) $(arg rgb_image_topic) $(arg depth_image_topic)" output="screen"/>
 
